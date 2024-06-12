@@ -73,6 +73,7 @@ class HubConnection {
 
   late Map<String?, InvocationEventCallback> _callbacks;
   late Map<String, List<MethodInvocationFunc>> _methods;
+  bool _listenSingleMethod = false;
   int? _invocationId;
 
   late List<ClosedCallback> _closedCallbacks;
@@ -90,6 +91,9 @@ class HubConnection {
     _hubConnectionStateMaintainer.hubConnectionState = hubConnectionState;
   }
 
+  void setListenSingleMethod(bool value) {
+    _listenSingleMethod = value;
+  }
   // connectionStarted is tracked independently from connectionState, so we can check if the
   // connection ever did successfully transition from connecting to connected before disconnecting.
   late bool _connectionStarted;
@@ -479,7 +483,7 @@ class HubConnection {
     if (_methods[methodName]!.indexOf(newMethod) != -1) {
       return;
     }
-    if ((_methods[methodName]?.length ?? 0) == 0) {
+    if (((_methods[methodName]?.length ?? 0) == 0) || !_listenSingleMethod) {
       _methods[methodName]!.add(newMethod);
     }
   }
