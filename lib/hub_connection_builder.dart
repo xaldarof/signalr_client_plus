@@ -23,6 +23,8 @@ class HubConnectionBuilder {
 
   Logger? _logger;
 
+  bool? _singleListener;
+
   /// If defined, this indicates the client should automatically attempt to reconnect if the connection is lost. */
   ///
   IRetryPolicy? _reconnectPolicy;
@@ -85,6 +87,11 @@ class HubConnectionBuilder {
     return this;
   }
 
+  HubConnectionBuilder withSingleListener(bool value) {
+    _singleListener = value;
+    return this;
+  }
+
   /// Creates a HubConnection from the configuration options specified in this builder.
   ///
   /// Returns the configured HubConnection.
@@ -92,8 +99,7 @@ class HubConnectionBuilder {
   HubConnection build() {
     // If httpConnectionOptions has a logger, use it. Otherwise, override it with the one
     // provided to configureLogger
-    final httpConnectionOptions =
-        _httpConnectionOptions ?? HttpConnectionOptions();
+    final httpConnectionOptions = _httpConnectionOptions ?? HttpConnectionOptions();
 
     // Now create the connection
     if (isStringEmpty(_url)) {
@@ -101,8 +107,7 @@ class HubConnectionBuilder {
           "The 'HubConnectionBuilder.withUrl' method must be called before building the connection.");
     }
     final connection = HttpConnection(_url!, options: httpConnectionOptions);
-    return HubConnection.create(
-        connection, _logger, _protocol ?? JsonHubProtocol(),
-        reconnectPolicy: _reconnectPolicy);
+    return HubConnection.create(connection, _logger, _protocol ?? JsonHubProtocol(),
+        reconnectPolicy: _reconnectPolicy, listenSingleMethod: _singleListener);
   }
 }
