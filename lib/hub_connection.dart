@@ -479,10 +479,10 @@ class HubConnection {
     if (_methods[methodName]!.indexOf(newMethod) != -1) {
       return;
     }
-
-    _methods[methodName]!.add(newMethod);
+    if ((_methods[methodName]?.length ?? 0) == 0) {
+      _methods[methodName]!.add(newMethod);
+    }
   }
-
   /// Removes the specified handler for the specified hub method.
   ///
   /// You must pass the exact same Function instance as was previously passed to HubConnection.on. Passing a different instance (even if the function
