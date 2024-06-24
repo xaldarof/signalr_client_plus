@@ -160,6 +160,7 @@ _hubConnection = HubConnectionBuilder()
           .withHubProtocol(MessagePackHubProtocol())
           .withAutomaticReconnect()
           .configureLogging(logger)
+          .withSingleListener(true)
           .build();
 ```
 
