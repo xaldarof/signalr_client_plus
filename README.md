@@ -227,6 +227,7 @@ final _hubConnection = HubConnectionBuilder()
           .withUrl(_serverUrl, options: httpConnectionOptions)
           .withAutomaticReconnect(retryDelays: [2000, 5000, 10000, 20000, null])
           .configureLogging(logger)
+          .withSingleListener(true)
           .build();
 ```
 
